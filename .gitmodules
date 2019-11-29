@@ -1,3 +1,6 @@
 [submodule "PRNet"]
 	path = PRNet
 	url = https://github.com/YadiraF/PRNet.git
+[submodule "python_color_transfer"]
+	path = python_color_transfer
+	url = https://github.com/pengbo-learn/python-color-transfer.git

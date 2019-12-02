@@ -8,34 +8,27 @@ Author's Matlab Implementation:
 """
 import os
 import sys
-sys.path.insert(0, './PRNet')
-sys.path.insert(0, './python_color_transfer')
 
 import cv2
 import time
 import numpy as np
-
-from PRNet.api import PRN
 from face3d.face3d.mesh.render import render_colors as render_texture
+
+print('src' in sys.modules)
+from src.utils import frontalize, normalize_v3
+
+print('src' in sys.modules)
+CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(CUR_DIR, 'python_color_transfer'))
 from python_color_transfer.color_transfer import ColorTransfer, Regrain
 
-def _normalize_v3(arr):
-    ''' Normalize a numpy array of 3 component vectors shape=(n,3) '''
-    lens = np.sqrt(arr[:,0]**2 + arr[:,1]**2 + arr[:,2]**2) + 1e-6
-    arr[:,0] /= lens
-    arr[:,1] /= lens
-    arr[:,2] /= lens                
-    return arr
+print('src' in sys.modules)
+import pdb
+pdb.set_trace()
 
-def frontalize(vertices):
-    '''copy from PRNet, edit npy path. rotate 3d face points to frontal pose.'''
-    cur_dir = os.path.dirname(os.path.abspath(__file__))
-    npy_path = os.path.join(cur_dir, 'PRNet/Data/uv-data/canonical_vertices.npy')
-    canonical_vertices = np.load(npy_path)
-    vertices_homo = np.hstack((vertices, np.ones([vertices.shape[0],1]))) #n x 4
-    P = np.linalg.lstsq(vertices_homo, canonical_vertices, rcond=None)[0].T # Affine matrix. 3 x 4
-    front_vertices = vertices_homo.dot(P.T)
-    return front_vertices
+sys.path.insert(0, os.path.join(CUR_DIR, 'PRNet'))
+from PRNet.api import PRN
+print(sys.path)
 
 class Relight:
     """Methods for relighting human faces."""
@@ -63,7 +56,7 @@ class Relight:
         n = np.cross(tris[::,1]-tris[::,0], tris[::,2]-tris[::,0])
         # n is now an array of normals per triangle. The length of each normal is dependent the vertices, 
         # we need to normalize these, so that our next step weights each normal equally.
-        _normalize_v3(n)
+        normalize_v3(n)
         # now we have a normalized array of normals, one per triangle, i.e., per triangle normals.
         # But instead of one per triangle (i.e., flat shading), we add to each vertex in that triangle, 
         # the triangles' normal. Multiple triangles would then contribute to every vertex, so we need to normalize again afterwards.
@@ -71,7 +64,7 @@ class Relight:
         normals[self.triangles[:,0]] += n
         normals[self.triangles[:,1]] += n
         normals[self.triangles[:,2]] += n
-        _normalize_v3(normals)
+        normalize_v3(normals)
         return normals
     def get_pos(self, img_arr=None, img_info=None):
         '''get 3d position map by PRNet.

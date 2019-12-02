@@ -73,13 +73,14 @@ class Relight:
         normals[self.triangles[:,2]] += n
         _normalize_v3(normals)
         return normals
-    def get_pos(self, img_arr=None):
+    def get_pos(self, img_arr=None, img_info=None):
         '''get 3d position map by PRNet.
         
         Args:
             img_arr: face img to extract 3d face position map.
+            img_info: [x1, x2, y1, y2]
         '''
-        pos = self.prn.process(img_arr)
+        pos = self.prn.process(img_arr, image_info=img_info)
         return pos
     def regrain(self, img_arr_in=None, img_arr_col=None):
         '''Regrain algorithm implemented in python_color_transfer.'''
@@ -163,9 +164,10 @@ def demo():
     # path
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     img_folder = os.path.join(cur_dir, 'imgs')
-    img_names = ['portrait_s1.jpg', 'portrait_s1.jpg']
-    ref_names = ['portrait_r1.jpg', 'portrait_r2.jpg']
-    out_names = ['portrait_o1.jpg', 'portrait_o2.jpg']
+    img_num = 6
+    img_names = ['portrait_s1.jpg' for _ in range(img_num)]
+    ref_names = ['portrait_r{}.jpg'.format(i) for i in range(1, 1+img_num)]
+    out_names = ['portrait_o{}.jpg'.format(i) for i in range(1, 1+img_num)]
     img_paths = [os.path.join(img_folder, x) for x in img_names]
     ref_paths = [os.path.join(img_folder, x) for x in ref_names]
     out_paths = [os.path.join(img_folder, x) for x in out_names]

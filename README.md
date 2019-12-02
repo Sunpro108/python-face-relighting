@@ -6,16 +6,36 @@ A python implementation of [portrait lighting transfer using a mass transport ap
 input img | reference img | relighting img
 ![img](imgs/portrait_o1.jpg)
 ![img](imgs/portrait_o2.jpg)
+![img](imgs/portrait_o3.jpg)
+![img](imgs/portrait_o4.jpg)
+![img](imgs/portrait_o5.jpg)
+![img](imgs/portrait_o6.jpg)
 
 # Run
 ```bash
 /root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
 /root/python-portrait-relight/imgs/portrait_r1.jpg: 873x799x3
-relight time: 33.05
+relight time: 19.50
 
 /root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
 /root/python-portrait-relight/imgs/portrait_r2.jpg: 950x950x3
-relight time: 35.80
+relight time: 19.54
+
+/root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
+/root/python-portrait-relight/imgs/portrait_r3.jpg: 1024x683x3
+relight time: 17.38
+
+/root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
+/root/python-portrait-relight/imgs/portrait_r4.jpg: 2403x1927x3
+relight time: 55.92
+
+/root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
+/root/python-portrait-relight/imgs/portrait_r5.jpg: 1024x744x3
+relight time: 18.34
+
+/root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
+/root/python-portrait-relight/imgs/portrait_r6.jpg: 981x774x3
+relight time: 18.94
 ```
 Most time is spent on PRNet, which rely on dlib to detect human faces. 
 Replacing the face detector will dramatically improve the speed.

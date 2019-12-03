@@ -1,6 +1,9 @@
-[submodule "PRNet"]
-	path = PRNet
+[submodule "python_portrait_relight/python_color_transfer"]
+	path = python_portrait_relight/python_color_transfer
+	url = https://github.com/pengbo-learn/python-color-transfer.git
+[submodule "python_portrait_relight/PRNet"]
+	path = python_portrait_relight/PRNet
 	url = https://github.com/YadiraF/PRNet.git
-[submodule "pytorch_retinaface"]
-	path = pytorch_retinaface
+[submodule "python_portrait_relight/pytorch_retinaface"]
+	path = python_portrait_relight/pytorch_retinaface
 	url = https://github.com/biubug6/Pytorch_Retinaface.git

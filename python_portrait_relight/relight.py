@@ -14,19 +14,19 @@ import numpy as np
 from face3d.face3d.mesh.render import render_colors as render_texture
 
 
-if 0:
-    CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-    sys.path.insert(0, os.path.join(CUR_DIR, 'python_color_transfer'))
-    sys.path.insert(0, os.path.join(CUR_DIR, 'PRNet'))
+# PRNet, pytorch_retinaface use relative import
+CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(CUR_DIR, 'PRNet'))
+sys.path.insert(0, os.path.join(CUR_DIR, 'pytorch_retinaface'))
 
 from .src.utils import frontalize, normalize_v3
-from python_color_transfer.color_transfer import ColorTransfer, Regrain
-from PRNet.api import PRN
+from .python_color_transfer.color_transfer import ColorTransfer, Regrain
+from .PRNet.api import PRN
 
 class Relight:
     """Methods for relighting human faces."""
-    def __init__(self, m=20, c=8, smoothness=0.125):
-        self.prn = PRN(is_dlib=True, prefix='PRNet') 
+    def __init__(self, m=20, c=8, smoothness=0.125, prefix=''):
+        self.prn = PRN(is_dlib=True, prefix=prefix) 
         self.ct = ColorTransfer(m=m, c=c)
         self.rg = Regrain(smoothness=smoothness)
         self.mask1d = self.prn.face_ind
@@ -82,18 +82,25 @@ class Relight:
                                                step_size=0.2)
         out_features = out_features.transpose()
         return out_features
-    def relight(self, img_arr=None, ref_arr=None):
+    def relight(self, img_arr=None, ref_arr=None,
+                box=None, ref_box=None):
         '''Relight img_arr according to ref_arr.
         
         Args:
             img_arr: input bgr numpy array.
             ref_arr: reference bgr numpy array, target lighting condition.
+            box: face box of img_arr.
+            ref_box: face box of ref_arr.
         Returns:
             out_arr: relighted bgr array of img_arr.
         '''
         # get 3d positions by PRNet
-        pos = self.get_pos(img_arr=img_arr)
-        ref_pos = self.get_pos(img_arr=ref_arr)
+        [x1, y1, x2, y2] = box
+        img_info = np.array([x1, x2, y1, y2]) 
+        pos = self.get_pos(img_arr=img_arr, img_info=img_info)
+        [x1, y1, x2, y2] = ref_box
+        img_info = np.array([x1, x2, y1, y2])
+        ref_pos = self.get_pos(img_arr=ref_arr, img_info=img_info)
         # obtain texture by remapping
         texture = cv2.remap(img_arr, pos[:,:,:2].astype(np.float32), 
                             None, interpolation=cv2.INTER_NEAREST, 

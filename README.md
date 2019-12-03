@@ -13,6 +13,8 @@ input img | reference img | relighting img
 
 # Run
 ```bash
+# python demo.py 
+
 /root/python-portrait-relight/imgs/portrait_s1.jpg: 800x800x3
 /root/python-portrait-relight/imgs/portrait_r1.jpg: 873x799x3
 relight time: 6.43

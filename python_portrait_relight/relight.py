@@ -25,8 +25,9 @@ from .PRNet.api import PRN
 
 class Relight:
     """Methods for relighting human faces."""
-    def __init__(self, m=20, c=8, smoothness=0.125, prefix=''):
-        self.prn = PRN(is_dlib=True, prefix=prefix) 
+    def __init__(self, m=20, c=8, smoothness=0.125):
+        pr_folder = os.path.join(CUR_DIR, 'PRNet')
+        self.prn = PRN(is_dlib=True, prefix=pr_folder) 
         self.ct = ColorTransfer(m=m, c=c)
         self.rg = Regrain(smoothness=smoothness)
         self.mask1d = self.prn.face_ind

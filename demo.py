@@ -24,8 +24,7 @@ def demo():
     ref_paths = [os.path.join(img_folder, x) for x in ref_names]
     out_paths = [os.path.join(img_folder, x) for x in out_names]
     # cls init
-    pr_folder = os.path.join(cur_dir, 'python_portrait_relight', 'PRNet')
-    RT = Relight(c=8, prefix=pr_folder)
+    RT = Relight(c=8)
     cfg_mnet['pretrain'] = False
     RF = RetinaFaceSDK(weight_path=weight_path, cpu=False, cfg=cfg_mnet)
     for img_path, ref_path, out_path in zip(img_paths, ref_paths, out_paths):
